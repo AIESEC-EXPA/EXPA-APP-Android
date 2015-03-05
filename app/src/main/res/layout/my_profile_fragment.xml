@@ -125,7 +125,7 @@
             </LinearLayout>
 
             <RelativeLayout
-                android:id="@+id/relativeLayout"
+                android:id="@+id/introductionRelativeLayout"
                 android:layout_width="fill_parent"
                 android:layout_height="50dp"
                 android:layout_alignEnd="@+id/fullNameOfPersonTextView"
@@ -159,7 +159,7 @@
                 android:id="@+id/linearLayout2"
                 android:layout_width="fill_parent"
                 android:layout_height="16dp"
-                android:layout_below="@+id/relativeLayout"
+                android:layout_below="@+id/introductionRelativeLayout"
                 android:background="@android:color/darker_gray"
                 android:orientation="vertical"
                 android:layout_alignParentLeft="true">

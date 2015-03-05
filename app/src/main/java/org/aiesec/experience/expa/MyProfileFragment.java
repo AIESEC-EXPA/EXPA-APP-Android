@@ -1,19 +1,19 @@
 package org.aiesec.experience.expa;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,12 +27,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by FanQuan on 2015/2/14 0014.
@@ -41,7 +37,7 @@ import java.util.Date;
 public class MyProfileFragment extends Fragment {
 
     private View view;
-    private String token = "ec3b6b607e5e184036292f4fcdafc93e637da8fc2f8f0212e31b7946b6f67669";
+    private String token = "3aa355382ac0c9f2cc1ef7510e92496f01f9127c4ecf374a54bbe2b67cc4afb2";
     private String url_1 = "https://gis-api.aiesec.org/v1/current_person.json";
     private String url_2 = "https://gis-api.aiesec.org:443/v1/people/";
     private String user_id;
@@ -58,6 +54,7 @@ public class MyProfileFragment extends Fragment {
     private TextView dateOfBirthTextView;
     private TextView introductionTextView;
     private ImageView introductionDetailImagView;
+    private RelativeLayout introductionRelativeLayout;
     private TextView phoneTextView;
     private TextView emailTextView;
     private TextView createUpdateDateTextView;
@@ -97,6 +94,7 @@ public class MyProfileFragment extends Fragment {
         phoneTextView = (TextView) view.findViewById(R.id.phoneTextView);
         emailTextView = (TextView) view.findViewById(R.id.emailTextView);
         createUpdateDateTextView = (TextView) view.findViewById(R.id.createUpdateDateTextView);
+        introductionRelativeLayout = (RelativeLayout) view.findViewById(R.id.introductionRelativeLayout);
 
         //HTTP request
         //Check network status first
@@ -194,13 +192,23 @@ public class MyProfileFragment extends Fragment {
                                 dateOfBirthTextView.setText(response.getString("dob"));
 
                                 //IntroductionTextView
-                                String _introductionTextView = response.getString("introduction");
+                                final String _introductionTextView = response.getString("introduction");
                                 if (_introductionTextView.equals("null"))
                                 {
                                     introductionTextView.setText("None");
                                     introductionTextView.setTextColor(getResources().getColor(android.R.color.darker_gray));
                                     introductionDetailImagView.setVisibility(View.INVISIBLE);
-                                    //TODO: set listener to null for outer layout
+                                    //introductionRelativeLayout.setOnClickListener(null);
+                                    introductionRelativeLayout.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent = new Intent(getActivity(), IntroductionActivity.class);
+                                            Bundle bundle = new Bundle();
+                                            bundle.putString("introduction", _introductionTextView);
+                                            intent.putExtras(bundle);
+                                            startActivity(intent);
+                                        }
+                                    });
                                 }
                                 else
                                 {
@@ -208,6 +216,16 @@ public class MyProfileFragment extends Fragment {
                                     introductionTextView.setTextColor(getResources().getColor(android.R.color.black));
                                     introductionDetailImagView.setVisibility(View.VISIBLE);
                                     introductionDetailImagView.setImageResource(R.drawable.icon_more);
+                                    introductionRelativeLayout.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent = new Intent(getActivity(), IntroductionActivity.class);
+                                            Bundle bundle = new Bundle();
+                                            bundle.putString("introduction", _introductionTextView);
+                                            intent.putExtras(bundle);
+                                            startActivity(intent);
+                                        }
+                                    });
                                     //todo: set listener to un-null for outer layout
                                 }
 
