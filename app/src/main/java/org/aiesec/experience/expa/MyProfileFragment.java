@@ -23,6 +23,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.MySSLSocketFactory;
 
 import org.apache.http.Header;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,7 +38,7 @@ import java.text.ParseException;
 public class MyProfileFragment extends Fragment {
 
     private View view;
-    private String token = "3aa355382ac0c9f2cc1ef7510e92496f01f9127c4ecf374a54bbe2b67cc4afb2";
+    private String token = "158e0fc357f0e2c0b6b08475de77b2b5bdd0b4a9d4657fbca55381541f88c276";
     private String url_1 = "https://gis-api.aiesec.org/v1/current_person.json";
     private String url_2 = "https://gis-api.aiesec.org:443/v1/people/";
     private String user_id;
@@ -114,7 +115,7 @@ public class MyProfileFragment extends Fragment {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
-                    Toast.makeText(getActivity(), "we get a JSONObject:" + response.getJSONObject("person").getString("id"), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "we get a JSONObject:" + response.getJSONObject("person").getString("id"), Toast.LENGTH_SHORT).show();
                     user_id = response.getJSONObject("person").getString("id");
 
                     _currentPositionNameTextView = response.getJSONObject("current_position").getString("position_name");
@@ -127,12 +128,13 @@ public class MyProfileFragment extends Fragment {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             try {
-                                Toast.makeText(getActivity(), response.getString("email"), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity(), response.getString("email"), Toast.LENGTH_SHORT).show();
 
                                 //Get and set profile photo
                                 client.get(response.getJSONObject("profile_photo_urls").getString("original"), new FileAsyncHttpResponseHandler(getActivity()) {
                                     @Override
                                     public void onFailure(int i, Header[] headers, Throwable throwable, File file) {
+                                        Toast.makeText(getActivity(), "Unable to load profile image.", Toast.LENGTH_SHORT).show();
                                         Log.e(getString(R.string.app_name), "Unable to load profile image.", throwable);
                                     }
 
@@ -183,6 +185,13 @@ public class MyProfileFragment extends Fragment {
                                 else if (gender.equals("Female"))
                                 {
                                     genderImgView.setImageResource(R.drawable.contact_female);
+                                }
+
+                                //programmes
+                                JSONArray array = response.getJSONArray("programmes");
+                                for(int i = 0; i < array.length(); i++)
+                                {
+                                    Tools.addProgrammeItem(programmesLinearLayout, ((JSONObject)array.get(i)).getString("short_name"), getActivity());
                                 }
 
                                 fullNameOfPersonTextView.setText(response.getString("full_name"));

@@ -2,8 +2,14 @@ package org.aiesec.experience.expa;
 
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -67,5 +73,33 @@ public class Tools {
         Date date = formatter1.parse(RFC3339String);
         SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd");
         return formatter2.format(date);
+    }
+
+    public static void addProgrammeItem(LinearLayout layout, String programmeText, Context context)
+    {
+        TextView textView = new TextView(context);
+        textView.setText(programmeText);
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextSize(14);
+        int width = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, context.getResources().getDisplayMetrics());
+        int height = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, context.getResources().getDisplayMetrics());
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width, height);
+        layoutParams.setMargins(7, 0, 0, 0);
+        switch (programmeText)
+        {
+            case "GCDP":
+                textView.setBackgroundColor(Color.rgb(0xe2, 0x84, 0x5d));
+                break;
+            case "GIP":
+                textView.setBackgroundColor(Color.rgb(0xee, 0xd0, 0x6b));
+                break;
+            case "TMP":
+                textView.setBackgroundColor(Color.rgb(0xa7, 0xd9, 0xac));
+                break;
+            case "TLP":
+                textView.setBackgroundColor(Color.rgb(0x8f, 0xcb, 0xd6));
+                break;
+        }
+        layout.addView(textView, layoutParams);
     }
 }
