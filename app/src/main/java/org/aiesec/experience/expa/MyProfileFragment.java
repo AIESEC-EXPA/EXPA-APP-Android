@@ -1,7 +1,14 @@
 package org.aiesec.experience.expa;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
@@ -38,7 +45,7 @@ import java.text.ParseException;
 public class MyProfileFragment extends Fragment {
 
     private View view;
-    private String token = "158e0fc357f0e2c0b6b08475de77b2b5bdd0b4a9d4657fbca55381541f88c276";
+    private String token = "9de190c431bedf9dd8651cc39eea849d637edf780ff1925e164e067e950538d6";
     private String url_1 = "https://gis-api.aiesec.org/v1/current_person.json";
     private String url_2 = "https://gis-api.aiesec.org:443/v1/people/";
     private String user_id;
@@ -51,6 +58,8 @@ public class MyProfileFragment extends Fragment {
     private TextView currentPositionNameTextView;
     private String _currentPositionNameTextView;    // Make all of views refresh at one time
     private TextView startEndDateTextView;
+    private String _startDate;
+    private String _endDate;
     private String _startEndDateTextView;
     private TextView dateOfBirthTextView;
     private TextView introductionTextView;
@@ -97,6 +106,107 @@ public class MyProfileFragment extends Fragment {
         createUpdateDateTextView = (TextView) view.findViewById(R.id.createUpdateDateTextView);
         introductionRelativeLayout = (RelativeLayout) view.findViewById(R.id.introductionRelativeLayout);
 
+        //If cached data exist
+        final SharedPreferences sharedPreferences = getActivity().getSharedPreferences("base", Activity.MODE_PRIVATE);
+        int ID_cached = sharedPreferences.getInt("ID", -1);
+        if(ID_cached != -1)
+        {
+            SQLiteDatabase database = getActivity().openOrCreateDatabase("EXPA.db", Context.MODE_PRIVATE, null);
+
+            String query = "SELECT * FROM persons WHERE ID=?";
+            Cursor cursor = database.rawQuery(query, new String[]{String.valueOf(ID_cached)});
+            if(cursor.moveToFirst())
+            {
+                //user data exist
+                //profile photo
+                if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+                {
+                    File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/EXPA/profilePhoto");
+                    if(dir.exists())
+                    {
+                        File dest = new File(dir, ID_cached + ".jpg");
+                        if(dest.exists())
+                        {
+                            profileImgView.setImageBitmap(BitmapFactory.decodeFile(dest.getAbsolutePath()));
+                        }
+                    }
+                }
+
+                //gender
+                String gender = cursor.getString(cursor.getColumnIndex("gender"));
+                if (gender.equals("Male"))
+                {
+                    genderImgView.setImageResource(R.drawable.contact_male);
+                }
+                else if (gender.equals("Female"))
+                {
+                    genderImgView.setImageResource(R.drawable.contact_female);
+                }
+
+                fullNameOfPersonTextView.setText(cursor.getString(cursor.getColumnIndex("full_name")));
+                fullNameOfCommitteeTextView.setText(cursor.getString(cursor.getColumnIndex("current_committee_name")));
+                currentPositionNameTextView.setText(cursor.getString(cursor.getColumnIndex("current_position_name")));
+                try
+                {
+                    startEndDateTextView.setText(Tools.startEndDateStringFromRFC3339(cursor.getString(cursor.getColumnIndex("start_date")), cursor.getString(cursor.getColumnIndex("end_date"))));
+                }
+                catch (ParseException e)
+                {
+                    Log.e(getString(R.string.app_name), "Some error occurs when parse rfc3339", e);
+                }
+                dateOfBirthTextView.setText(cursor.getString(cursor.getColumnIndex("dob")));
+
+                //introduction
+                final String _introductionTextView = cursor.getString(cursor.getColumnIndex("introduction"));
+                if (_introductionTextView.equals("None"))
+                {
+                    introductionTextView.setText("None");
+                    introductionTextView.setTextColor(getResources().getColor(android.R.color.darker_gray));
+                    introductionDetailImagView.setVisibility(View.INVISIBLE);
+                    introductionRelativeLayout.setOnClickListener(null);
+                }
+                else
+                {
+                    introductionTextView.setText(_introductionTextView);
+                    introductionTextView.setTextColor(getResources().getColor(android.R.color.black));
+                    introductionDetailImagView.setVisibility(View.VISIBLE);
+                    introductionDetailImagView.setImageResource(R.drawable.icon_more);
+                    introductionRelativeLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getActivity(), IntroductionActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("introduction", _introductionTextView);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                        }
+                    });
+                }
+
+                phoneTextView.setText(cursor.getString(cursor.getColumnIndex("phone")));
+                emailTextView.setText(cursor.getString(cursor.getColumnIndex("email")));
+
+                try
+                {
+                    createUpdateDateTextView.setText("Created At " + Tools.formattedDateStringFromRFC3339(cursor.getString(cursor.getColumnIndex("created_at"))) + " | Updated At " + Tools.formattedDateStringFromRFC3339(cursor.getString(cursor.getColumnIndex("updated_at"))));
+                }
+                catch (ParseException e)
+                {
+                    Log.e(getString(R.string.app_name), "Some error occurs when parse rfc3339", e);
+                }
+            }
+
+            query = "SELECT * FROM programmes WHERE user_ID=?";
+            cursor = database.rawQuery(query, new String[]{String.valueOf(ID_cached)});
+            programmesLinearLayout.removeAllViews();
+            while(cursor.moveToNext())
+            {
+                Tools.addProgrammeItem(programmesLinearLayout, cursor.getString(cursor.getColumnIndex("short_name")), getActivity());
+            }
+            cursor.close();
+        }
+
+
         //HTTP request
         //Check network status first
         if (!Tools.isNetworkAvailable(getActivity()))
@@ -113,25 +223,31 @@ public class MyProfileFragment extends Fragment {
         client.setMaxRetriesAndTimeout(5, 1000);
         client.get(url_1 + "?access_token=" + token, new JsonHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response1) {
                 try {
-                    Toast.makeText(getActivity(), "we get a JSONObject:" + response.getJSONObject("person").getString("id"), Toast.LENGTH_SHORT).show();
-                    user_id = response.getJSONObject("person").getString("id");
+                    Toast.makeText(getActivity(), "we get a JSONObject:" + response1.getJSONObject("person").getString("id"), Toast.LENGTH_SHORT).show();
+                    user_id = response1.getJSONObject("person").getString("id");
 
-                    _currentPositionNameTextView = response.getJSONObject("current_position").getString("position_name");
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putInt("ID", Integer.valueOf(user_id));
+                    editor.apply();
+
+                    _currentPositionNameTextView = response1.getJSONObject("current_position").getString("position_name");
 
                     //Format date in RFC3339
-                    _startEndDateTextView = Tools.startEndDateStringFromRFC3339(response.getJSONObject("current_position").getString("start_date"), response.getJSONObject("current_position").getString("end_date"));
+                    _startDate = response1.getJSONObject("current_position").getString("start_date");
+                    _endDate = response1.getJSONObject("current_position").getString("end_date");
+                    _startEndDateTextView = Tools.startEndDateStringFromRFC3339(_startDate, _endDate);
 
                     //HTTP request 2
                     client.get(url_2 + user_id + ".json?access_token=" + token, new JsonHttpResponseHandler() {
                         @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response2) {
                             try {
-                                Toast.makeText(getActivity(), response.getString("email"), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), response2.getString("email"), Toast.LENGTH_SHORT).show();
 
                                 //Get and set profile photo
-                                client.get(response.getJSONObject("profile_photo_urls").getString("original"), new FileAsyncHttpResponseHandler(getActivity()) {
+                                client.get(response2.getJSONObject("profile_photo_urls").getString("original"), new FileAsyncHttpResponseHandler(getActivity()) {
                                     @Override
                                     public void onFailure(int i, Header[] headers, Throwable throwable, File file) {
                                         Toast.makeText(getActivity(), "Unable to load profile image.", Toast.LENGTH_SHORT).show();
@@ -177,7 +293,7 @@ public class MyProfileFragment extends Fragment {
                                 });
 
                                 //decide which gender pic to display
-                                String gender = response.getString("gender");
+                                String gender = response2.getString("gender");
                                 if (gender.equals("Male"))
                                 {
                                     genderImgView.setImageResource(R.drawable.contact_male);
@@ -188,20 +304,21 @@ public class MyProfileFragment extends Fragment {
                                 }
 
                                 //programmes
-                                JSONArray array = response.getJSONArray("programmes");
-                                for(int i = 0; i < array.length(); i++)
+                                programmesLinearLayout.removeAllViews();
+                                JSONArray programmes = response2.getJSONArray("programmes");
+                                for(int i = 0; i < programmes.length(); i++)
                                 {
-                                    Tools.addProgrammeItem(programmesLinearLayout, ((JSONObject)array.get(i)).getString("short_name"), getActivity());
+                                    Tools.addProgrammeItem(programmesLinearLayout, ((JSONObject) programmes.get(i)).getString("short_name"), getActivity());
                                 }
 
-                                fullNameOfPersonTextView.setText(response.getString("full_name"));
-                                fullNameOfCommitteeTextView.setText(response.getJSONObject("current_office").getString("full_name"));
+                                fullNameOfPersonTextView.setText(response2.getString("full_name"));
+                                fullNameOfCommitteeTextView.setText(response2.getJSONObject("current_office").getString("full_name"));
                                 currentPositionNameTextView.setText(_currentPositionNameTextView);
                                 startEndDateTextView.setText(_startEndDateTextView);
-                                dateOfBirthTextView.setText(response.getString("dob"));
+                                dateOfBirthTextView.setText(response2.getString("dob"));
 
                                 //IntroductionTextView
-                                final String _introductionTextView = response.getString("introduction");
+                                final String _introductionTextView = response2.getString("introduction");
                                 if (_introductionTextView.equals("null"))
                                 {
                                     introductionTextView.setText("None");
@@ -235,14 +352,61 @@ public class MyProfileFragment extends Fragment {
                                             startActivity(intent);
                                         }
                                     });
-                                    //todo: set listener to un-null for outer layout
                                 }
 
-                                phoneTextView.setText(response.getJSONObject("contact_info").getString("phone"));
-                                emailTextView.setText(response.getString("email"));
-                                createUpdateDateTextView.setText("Created At " + Tools.formattedDateStringFromRFC3339(response.getString("created_at")) + " | Updated At " + Tools.formattedDateStringFromRFC3339(response.getString("updated_at")));
+                                phoneTextView.setText(response2.getJSONObject("contact_info").getString("phone"));
+                                emailTextView.setText(response2.getString("email"));
+                                createUpdateDateTextView.setText("Created At " + Tools.formattedDateStringFromRFC3339(response2.getString("created_at")) + " | Updated At " + Tools.formattedDateStringFromRFC3339(response2.getString("updated_at")));
 
-                                //TODO: programmesLinearLayout
+                                //save to SQLite
+                                SQLiteDatabase database = getActivity().openOrCreateDatabase("EXPA.db", Context.MODE_PRIVATE, null);
+
+                                //persons
+                                String query = "CREATE TABLE IF NOT EXISTS persons(ID INTEGER PRIMARY KEY, first_name TEXT, last_name TEXT, full_name TEXT, dob TEXT, introduction TEXT, gender TEXT, email TEXT, phone TEXT, current_position_name TEXT, current_committee_name TEXT, start_date TEXT, end_date TEXT, created_at TEXT, updated_at TEXT)";
+                                database.execSQL(query);
+
+                                query = "DELETE FROM persons WHERE ID=?";
+                                database.execSQL(query, new Object[]{user_id});
+
+                                query = "INSERT INTO persons(ID, first_name, last_name, full_name, dob, introduction, gender, email, phone, current_position_name, current_committee_name, start_date, end_date, created_at, updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                                Object params1[] = {user_id, response2.getString("first_name"), response2.getString("last_name"), response2.getString("full_name"), dateOfBirthTextView.getText(), introductionTextView.getText(), gender, response2.getString("email"), phoneTextView.getText(), _currentPositionNameTextView, fullNameOfCommitteeTextView.getText(), _startDate, _endDate, response2.getString("created_at"), response2.getString("updated_at")};
+                                database.execSQL(query, params1);
+
+                                //positions
+                                query = "CREATE TABLE IF NOT EXISTS positions(user_ID INTEGER, position_ID INTEGER PRIMARY KEY, position_name TEXT, start_date TEXT, end_date TEXT, team_ID INTEGER, team_title TEXT)";
+                                database.execSQL(query);
+
+                                query = "DELETE FROM positions WHERE user_ID=?";
+                                database.execSQL(query, new Object[]{user_id});
+
+                                query = "INSERT INTO positions(user_ID, position_ID, position_name, start_date, end_date, team_ID, team_title) VALUES(?,?,?,?,?,?,?)";
+                                JSONArray positions = response2.getJSONArray("positions");
+                                for(int i = 0; i < positions.length(); i++)
+                                {
+                                    JSONObject t = (JSONObject) positions.get(i);
+                                    database.execSQL(query, new Object[]{user_id, t.getString("id"), t.getString("position_name"), t.getString("start_date"), t.getString("end_date"), t.getJSONObject("team").getString("id"), t.getJSONObject("team").getString("title")});
+                                }
+                                //todo: positions see more
+
+                                //programmes
+                                query = "CREATE TABLE IF NOT EXISTS programmes(user_ID INTEGER, programme_ID INTEGER, short_name TEXT)";
+                                database.execSQL(query);
+
+                                query = "DELETE FROM programmes WHERE user_ID=?";
+                                database.execSQL(query, new Object[]{user_id});
+
+                                query = "INSERT INTO programmes(user_ID, programme_ID, short_name) VALUES(?,?,?)";
+                                for(int i = 0; i < programmes.length(); i++)
+                                {
+                                    JSONObject t = (JSONObject) programmes.get(i);
+                                    database.execSQL(query, new Object[]{user_id, t.getString("id"), t.getString("short_name")});
+                                }
+
+                                database.close();
+                            }
+                            catch (SQLException e)
+                            {
+                                Log.e(getString(R.string.app_name), "Some error occurs when save to SQLite", e);
                             }
                             catch (JSONException e)
                             {
