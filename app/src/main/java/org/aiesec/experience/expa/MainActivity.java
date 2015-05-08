@@ -47,8 +47,8 @@ public class MainActivity extends FragmentActivity {
         resideMenu.attachToActivity(this);
 
         // create menu items;
-        String titles[] = { "Home", "Profile", "Calendar", "Settings" };
-        int icon[] = { R.drawable.icon_home, R.drawable.icon_profile, R.drawable.icon_calendar, R.drawable.icon_settings };
+        String titles[] = { "Profile", "Opp.", "Calendar", "Settings" };
+        int icon[] = {R.drawable.icon_profile, R.drawable.icon_home, R.drawable.icon_calendar, R.drawable.icon_settings };  //todo: change the icon
 
 
 
@@ -56,14 +56,7 @@ public class MainActivity extends FragmentActivity {
         One.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v == One)
-                {
-                    changeFragment(new Fragment1());
-                }
-                else if (v == Two)
-                {
-                    changeFragment(new Fragment2());
-                }
+                changeFragment(new MyProfileFragment());
                 resideMenu.closeMenu();
             }
         });
@@ -73,14 +66,7 @@ public class MainActivity extends FragmentActivity {
         Two.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v == One)
-                {
-                    changeFragment(new Fragment1());
-                }
-                else if (v == Two)
-                {
-                    changeFragment(new Fragment2());
-                }
+                changeFragment(new SearchOpportunityFragment());
                 resideMenu.closeMenu();
             }
         });

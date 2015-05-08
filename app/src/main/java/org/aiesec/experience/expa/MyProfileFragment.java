@@ -45,7 +45,7 @@ import java.text.ParseException;
 public class MyProfileFragment extends Fragment {
 
     private View view;
-    private String token = "9de190c431bedf9dd8651cc39eea849d637edf780ff1925e164e067e950538d6";
+    private String token = "4989e6425e3e117950c08ead2cb1069c7a3f5564542667c23a433470f7b9f14b";
     private String url_1 = "https://gis-api.aiesec.org/v1/current_person.json";
     private String url_2 = "https://gis-api.aiesec.org:443/v1/people/";
     private String user_id;
@@ -68,6 +68,7 @@ public class MyProfileFragment extends Fragment {
     private TextView phoneTextView;
     private TextView emailTextView;
     private TextView createUpdateDateTextView;
+    private RelativeLayout seeMoreRelativeLayout;
 
     /**
      * Called to have the fragment instantiate its user interface view.
@@ -105,10 +106,11 @@ public class MyProfileFragment extends Fragment {
         emailTextView = (TextView) view.findViewById(R.id.emailTextView);
         createUpdateDateTextView = (TextView) view.findViewById(R.id.createUpdateDateTextView);
         introductionRelativeLayout = (RelativeLayout) view.findViewById(R.id.introductionRelativeLayout);
+        seeMoreRelativeLayout = (RelativeLayout) view.findViewById(R.id.seeMoreRelativeLayout);
 
         //If cached data exist
         final SharedPreferences sharedPreferences = getActivity().getSharedPreferences("base", Activity.MODE_PRIVATE);
-        int ID_cached = sharedPreferences.getInt("ID", -1);
+        final int ID_cached = sharedPreferences.getInt("ID", -1);
         if(ID_cached != -1)
         {
             SQLiteDatabase database = getActivity().openOrCreateDatabase("EXPA.db", Context.MODE_PRIVATE, null);
@@ -163,7 +165,17 @@ public class MyProfileFragment extends Fragment {
                     introductionTextView.setText("None");
                     introductionTextView.setTextColor(getResources().getColor(android.R.color.darker_gray));
                     introductionDetailImagView.setVisibility(View.INVISIBLE);
-                    introductionRelativeLayout.setOnClickListener(null);
+                    //introductionRelativeLayout.setOnClickListener(null);
+                    introductionRelativeLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getActivity(), IntroductionActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("introduction", _introductionTextView);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                        }
+                    });
                 }
                 else
                 {
@@ -204,6 +216,24 @@ public class MyProfileFragment extends Fragment {
                 Tools.addProgrammeItem(programmesLinearLayout, cursor.getString(cursor.getColumnIndex("short_name")), getActivity());
             }
             cursor.close();
+
+            seeMoreRelativeLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try
+                    {
+                        Intent intent = new Intent(getActivity(), PositionsActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("ID", String.valueOf(ID_cached));
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }
+                    catch(Exception e)
+                    {
+                        Log.e(getString(R.string.app_name), "aaaaaaaaaaaaaa", e);
+                    }
+                }
+            });
         }
 
 
@@ -221,6 +251,7 @@ public class MyProfileFragment extends Fragment {
         client.setResponseTimeout(30 * 1000);
         //client.setConnectTimeout(20 * 1000);
         client.setMaxRetriesAndTimeout(5, 1000);
+
         client.get(url_1 + "?access_token=" + token, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response1) {
@@ -386,7 +417,17 @@ public class MyProfileFragment extends Fragment {
                                     JSONObject t = (JSONObject) positions.get(i);
                                     database.execSQL(query, new Object[]{user_id, t.getString("id"), t.getString("position_name"), t.getString("start_date"), t.getString("end_date"), t.getJSONObject("team").getString("id"), t.getJSONObject("team").getString("title")});
                                 }
-                                //todo: positions see more
+
+                                seeMoreRelativeLayout.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent(getActivity(), PositionsActivity.class);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("ID", user_id);
+                                        intent.putExtras(bundle);
+                                        startActivity(intent);
+                                    }
+                                });
 
                                 //programmes
                                 query = "CREATE TABLE IF NOT EXISTS programmes(user_ID INTEGER, programme_ID INTEGER, short_name TEXT)";
@@ -421,7 +462,7 @@ public class MyProfileFragment extends Fragment {
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                             Log.e(getString(R.string.app_name), "Some error occurs when HTTP request 2.", throwable);
-                            Log.e(getString(R.string.app_name), "The following is the JSON string:" + errorResponse.toString());
+                            //Log.e(getString(R.string.app_name), "The following is the JSON string:" + errorResponse.toString());
                             //TODO: refresh token
                         }
                     });
@@ -439,7 +480,7 @@ public class MyProfileFragment extends Fragment {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.e(getString(R.string.app_name), "Some error occurs when HTTP request 1.", throwable);
-                Log.e(getString(R.string.app_name), "The following is the JSON string:" + errorResponse.toString());
+                //Log.e(getString(R.string.app_name), "The following is the JSON string:" + errorResponse.toString());
                 //TODO: refresh token
             }
         });

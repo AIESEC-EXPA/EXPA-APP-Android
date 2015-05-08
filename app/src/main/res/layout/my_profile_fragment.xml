@@ -238,7 +238,7 @@
             </LinearLayout>
 
             <RelativeLayout
-                android:id="@+id/relativeLayout2"
+                android:id="@+id/seeMoreRelativeLayout"
                 android:layout_width="fill_parent"
                 android:layout_height="50dp"
                 android:layout_alignParentLeft="true"
@@ -279,7 +279,7 @@
                 android:layout_centerHorizontal="true"
                 android:text="createUpdateDateTextView"
                 android:textColor="@android:color/darker_gray"
-                android:layout_below="@+id/relativeLayout2"
+                android:layout_below="@+id/seeMoreRelativeLayout"
                 android:layout_marginTop="70dp"
                 android:layout_marginBottom="5dp"/>
 
