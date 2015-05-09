@@ -8,5 +8,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_introduction">IntroductionActivity</string>
     <string name="title_activity_positions">Positions</string>
+    <string name="title_activity_opportunity_info">Opportunity Infomation</string>
 
 </resources>

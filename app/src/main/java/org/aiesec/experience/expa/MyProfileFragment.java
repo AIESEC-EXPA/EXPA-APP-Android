@@ -485,6 +485,8 @@ public class MyProfileFragment extends Fragment {
             }
         });
 
+        getActivity().setTitle("My Profile");
+
         return view;
     }
 }

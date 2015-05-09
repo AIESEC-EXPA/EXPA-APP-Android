@@ -28,8 +28,12 @@
         </activity>
         <activity
             android:name=".PositionsActivity"
-            android:label="@string/title_activity_positions">
-            </activity>
+            android:label="@string/title_activity_positions" >
+        </activity>
+        <activity
+            android:name=".OpportunityInfoActivity"
+            android:label="@string/title_activity_opportunity_info" >
+        </activity>
     </application>
 
 </manifest>

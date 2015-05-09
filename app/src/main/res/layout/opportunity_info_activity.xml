@@ -1,0 +1,153 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.aiesec.experience.expa.OpportunityInfoActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Project Title"
+        android:id="@+id/projectTitleTextView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Applied"
+        android:id="@+id/projectStatusTextView"
+        android:layout_alignBottom="@+id/projectTitleTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="in"
+        android:id="@+id/textView10"
+        android:layout_below="@+id/projectTitleTextView"
+        android:layout_alignLeft="@+id/projectTitleTextView"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location"
+        android:id="@+id/projectLocationTextView"
+        android:layout_below="@+id/projectTitleTextView"
+        android:layout_toRightOf="@+id/textView10"
+        android:layout_marginLeft="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="host committee"
+        android:id="@+id/textView11"
+        android:layout_below="@+id/textView10"
+        android:layout_alignLeft="@+id/projectTitleTextView"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Host Committee"
+        android:id="@+id/projectHostCommitteeTextView"
+        android:layout_alignBottom="@+id/textView11"
+        android:layout_toRightOf="@+id/textView11"
+        android:layout_marginLeft="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Organization:"
+        android:id="@+id/textView13"
+        android:layout_below="@+id/textView11"
+        android:layout_alignLeft="@+id/projectTitleTextView"
+        android:layout_marginTop="28dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Organization"
+        android:id="@+id/projectOrganizationTextView"
+        android:layout_alignBottom="@+id/textView13"
+        android:layout_toRightOf="@+id/textView13"
+        android:layout_marginLeft="5dp" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Description:"
+        android:id="@+id/textView15"
+        android:layout_below="@+id/textView13"
+        android:paddingLeft="5dp"
+        android:background="#ffc8c8c8"
+        android:layout_marginTop="10dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/textView15"
+        android:layout_alignLeft="@+id/textView15"
+        android:id="@+id/relativeLayout">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="description"
+            android:id="@+id/projectDescriptionTextView"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp" />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="fill_parent"
+            android:id="@+id/imageView2"
+            android:src="@drawable/icon_more"
+            android:layout_alignParentRight="true"
+            android:padding="10dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_marginTop="0dp"
+        android:background="@android:color/black"
+        android:id="@+id/relativeLayout2"></RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TN-Manager:"
+        android:id="@+id/textView14"
+        android:layout_below="@+id/relativeLayout2"
+        android:layout_alignLeft="@+id/projectTitleTextView"
+        android:layout_marginTop="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TN Manager"
+        android:id="@+id/projectTNManagerTextView"
+        android:layout_below="@+id/textView14"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="50dp" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/black"
+        android:id="@+id/relativeLayout3"
+        android:layout_below="@+id/projectTNManagerTextView"
+        android:layout_marginTop="5dp" />
+
+</RelativeLayout>

@@ -43,6 +43,9 @@ public class SearchOpportunityFragment extends Fragment {
                 new String[]{"title", "location"},
                 new int[]{R.id.projectTitleTextView, R.id.projectLocationTextView});
         listView.setAdapter(adapter);
+
+        getActivity().setTitle("Search Opportunities");
+
         return view;
     }
 

@@ -20,12 +20,7 @@ public class IntroductionActivity extends Activity {
         TextView introductionTextView = (TextView) findViewById(R.id.introductionTextView);
         introductionTextView.setText(getIntent().getExtras().getString("introduction"));
 
-        ActionBar actionBar = getActionBar();
-        if (actionBar == null)
-        {
-            Toast.makeText(this, "nulllllllllllllllll", Toast.LENGTH_SHORT).show();
-        }
-
+        setTitle("Introduction");
     }
 
 
