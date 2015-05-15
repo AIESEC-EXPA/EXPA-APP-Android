@@ -7,23 +7,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Project Title"
+        android:text="Dare to Dream"
         android:id="@+id/projectTitleTextView"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Applied"
         android:id="@+id/projectStatusTextView"
-        android:layout_alignBottom="@+id/projectTitleTextView"
         android:layout_centerHorizontal="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
-        android:textColor="@android:color/darker_gray" />
+        android:textColor="#ff8796ff"
+        android:textSize="30dp"
+        android:layout_marginTop="10dp"
+        android:textStyle="italic" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -37,7 +40,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Location"
+        android:text="Kuala Lumpur, Malaysia"
         android:id="@+id/projectLocationTextView"
         android:layout_below="@+id/projectTitleTextView"
         android:layout_toRightOf="@+id/textView10"
@@ -55,7 +58,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Host Committee"
+        android:text="UNMC"
         android:id="@+id/projectHostCommitteeTextView"
         android:layout_alignBottom="@+id/textView11"
         android:layout_toRightOf="@+id/textView11"
@@ -66,14 +69,15 @@
         android:layout_height="wrap_content"
         android:text="Organization:"
         android:id="@+id/textView13"
-        android:layout_below="@+id/textView11"
         android:layout_alignLeft="@+id/projectTitleTextView"
-        android:layout_marginTop="28dp" />
+        android:layout_marginTop="38dp"
+        android:layout_below="@+id/textView11"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Organization"
+        android:text="Patronas"
         android:id="@+id/projectOrganizationTextView"
         android:layout_alignBottom="@+id/textView13"
         android:layout_toRightOf="@+id/textView13"
@@ -86,8 +90,9 @@
         android:id="@+id/textView15"
         android:layout_below="@+id/textView13"
         android:paddingLeft="5dp"
-        android:background="#ffc8c8c8"
-        android:layout_marginTop="10dp" />
+        android:background="#ffdddddd"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -99,13 +104,14 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="description"
+            android:text="Teaching English in the school to enhance student&apos;s English ability and become more."
             android:id="@+id/projectDescriptionTextView"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="50dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp" />
+            android:layout_marginTop="5dp"
+            android:paddingTop="5dp" />
 
         <ImageView
             android:layout_width="50dp"
@@ -131,12 +137,13 @@
         android:id="@+id/textView14"
         android:layout_below="@+id/relativeLayout2"
         android:layout_alignLeft="@+id/projectTitleTextView"
-        android:layout_marginTop="5dp" />
+        android:layout_marginTop="5dp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TN Manager"
+        android:text="Jennifer Ong"
         android:id="@+id/projectTNManagerTextView"
         android:layout_below="@+id/textView14"
         android:layout_marginTop="5dp"
@@ -149,5 +156,124 @@
         android:id="@+id/relativeLayout3"
         android:layout_below="@+id/projectTNManagerTextView"
         android:layout_marginTop="5dp" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="28dp"
+        android:layout_below="@+id/textView11"
+        android:layout_marginTop="5dp"
+        android:layout_centerHorizontal="true">
+
+        <Button
+            android:layout_width="70dp"
+            android:layout_height="28dp"
+            android:text="Contract"
+            android:id="@+id/contractButton"
+            android:textSize="12dp"
+            android:background="#ffb2eeff"
+            android:onClick="onClickContractButton" />
+
+        <Button
+            android:layout_width="70dp"
+            android:layout_height="28dp"
+            android:text="Insurance"
+            android:id="@+id/button2"
+            android:textSize="12dp"
+            android:background="#ffb4ffb4"
+            android:layout_marginLeft="15dp" />
+
+        <Button
+            android:layout_width="70dp"
+            android:layout_height="28dp"
+            android:text="Flight"
+            android:id="@+id/button3"
+            android:textSize="12dp"
+            android:background="#ffffb4ff"
+            android:layout_marginLeft="15dp" />
+
+        <Button
+            android:layout_width="70dp"
+            android:layout_height="28dp"
+            android:text="Pay"
+            android:id="@+id/button4"
+            android:textSize="12dp"
+            android:background="#ffffb45a"
+            android:layout_marginLeft="15dp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Duration:"
+        android:id="@+id/textView12"
+        android:layout_below="@+id/relativeLayout3"
+        android:layout_alignLeft="@+id/projectTitleTextView"
+        android:layout_marginTop="5dp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:layout_width="285dp"
+        android:layout_height="101dp"
+        android:layout_below="@+id/textView12"
+        android:background="@drawable/duration"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="09"
+            android:id="@+id/durationFromDayTextView"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="27dp"
+            android:layout_marginTop="25dp"
+            android:textStyle="bold"
+            android:textSize="25dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="JUL"
+            android:id="@+id/durationFromMonthTextView"
+            android:layout_below="@+id/durationFromDayTextView"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="24dp"
+            android:textSize="20dp"
+            android:layout_marginTop="0dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="7-8 WEEKS"
+            android:id="@+id/durationWeeksTextView"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:textColor="@android:color/holo_red_dark" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="04"
+            android:id="@+id/durationToDayTextView"
+            android:textStyle="bold"
+            android:textSize="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="27dp"
+            android:layout_marginTop="25dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="JUL"
+            android:id="@+id/durationToMonthTextView"
+            android:textSize="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/durationToDayTextView"
+            android:layout_marginRight="24dp" />
+    </RelativeLayout>
 
 </RelativeLayout>

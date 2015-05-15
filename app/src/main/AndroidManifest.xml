@@ -34,6 +34,14 @@
             android:name=".OpportunityInfoActivity"
             android:label="@string/title_activity_opportunity_info" >
         </activity>
+        <activity
+            android:name=".ContractActivity"
+            android:label="@string/title_activity_contract" >
+        </activity>
+        <activity
+            android:name=".newOpportunityActivity"
+            android:label="@string/title_activity_new_opportunity" >
+        </activity>
     </application>
 
 </manifest>

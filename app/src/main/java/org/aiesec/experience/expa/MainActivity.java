@@ -1,6 +1,7 @@
 package org.aiesec.experience.expa;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -20,6 +21,8 @@ public class MainActivity extends FragmentActivity {
     private ResideMenu resideMenu;
     private ResideMenuItem One;
     private ResideMenuItem Two;
+    private ResideMenuItem Three;
+    private int frag = 0;
 
     /**
      * Called to process touch screen events.  You can override this to
@@ -35,6 +38,7 @@ public class MainActivity extends FragmentActivity {
         return resideMenu.dispatchTouchEvent(ev);
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +51,7 @@ public class MainActivity extends FragmentActivity {
         resideMenu.attachToActivity(this);
 
         // create menu items;
-        String titles[] = { "Profile", "Opp.", "Calendar", "Settings" };
+        String titles[] = { "Profile", "Opp.", "My Opp.", "Settings" };
         int icon[] = {R.drawable.icon_profile, R.drawable.icon_home, R.drawable.icon_calendar, R.drawable.icon_settings };  //todo: change the icon
 
 
@@ -57,6 +61,8 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 changeFragment(new MyProfileFragment());
+                frag = 0;
+                invalidateOptionsMenu();
                 resideMenu.closeMenu();
             }
         });
@@ -67,12 +73,26 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 changeFragment(new SearchOpportunityFragment());
+                frag = 1;
+                invalidateOptionsMenu();
                 resideMenu.closeMenu();
             }
         });
         resideMenu.addMenuItem(Two, ResideMenu.DIRECTION_LEFT);
 
-        for (int i = 2; i < titles.length; i++){
+        Three = new ResideMenuItem(this, icon[2], titles[2]);
+        Three.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeFragment(new MyOpportunitiesFragment());
+                frag = 2;
+                invalidateOptionsMenu();
+                resideMenu.closeMenu();
+            }
+        });
+        resideMenu.addMenuItem(Three, ResideMenu.DIRECTION_LEFT);
+
+        for (int i = 3; i < titles.length; i++){
             ResideMenuItem item = new ResideMenuItem(this, icon[i], titles[i]);
             item.setOnClickListener(null);
             resideMenu.addMenuItem(item,  ResideMenu.DIRECTION_LEFT); // or  ResideMenu.DIRECTION_RIGHT
@@ -97,6 +117,15 @@ public class MainActivity extends FragmentActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if(frag == 2)
+            getMenuInflater().inflate(R.menu.menu_my_opportunities, menu);
+        else
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -104,7 +133,9 @@ public class MainActivity extends FragmentActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.newOpportunityMenuItem) {
+            Intent intent = new Intent(this, newOpportunityActivity.class);
+            startActivity(intent);
             return true;
         }
 

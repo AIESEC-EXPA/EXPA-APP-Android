@@ -154,7 +154,7 @@ public class MyProfileFragment extends Fragment {
                 }
                 catch (ParseException e)
                 {
-                    Log.e(getString(R.string.app_name), "Some error occurs when parse rfc3339", e);
+                    Log.e("EXPA", "Some error occurs when parse rfc3339", e);
                 }
                 dateOfBirthTextView.setText(cursor.getString(cursor.getColumnIndex("dob")));
 
@@ -163,7 +163,8 @@ public class MyProfileFragment extends Fragment {
                 if (_introductionTextView.equals("None"))
                 {
                     introductionTextView.setText("None");
-                    introductionTextView.setTextColor(getResources().getColor(android.R.color.darker_gray));
+                    if(isAdded())
+                        introductionTextView.setTextColor(getResources().getColor(android.R.color.darker_gray));
                     introductionDetailImagView.setVisibility(View.INVISIBLE);
                     //introductionRelativeLayout.setOnClickListener(null);
                     introductionRelativeLayout.setOnClickListener(new View.OnClickListener() {
@@ -180,7 +181,8 @@ public class MyProfileFragment extends Fragment {
                 else
                 {
                     introductionTextView.setText(_introductionTextView);
-                    introductionTextView.setTextColor(getResources().getColor(android.R.color.black));
+                    if(isAdded())
+                        introductionTextView.setTextColor(getResources().getColor(android.R.color.black));
                     introductionDetailImagView.setVisibility(View.VISIBLE);
                     introductionDetailImagView.setImageResource(R.drawable.icon_more);
                     introductionRelativeLayout.setOnClickListener(new View.OnClickListener() {
@@ -204,7 +206,7 @@ public class MyProfileFragment extends Fragment {
                 }
                 catch (ParseException e)
                 {
-                    Log.e(getString(R.string.app_name), "Some error occurs when parse rfc3339", e);
+                    Log.e("EXPA", "Some error occurs when parse rfc3339", e);
                 }
             }
 
@@ -230,7 +232,7 @@ public class MyProfileFragment extends Fragment {
                     }
                     catch(Exception e)
                     {
-                        Log.e(getString(R.string.app_name), "aaaaaaaaaaaaaa", e);
+                        Log.e("EXPA", "aaaaaaaaaaaaaa", e);
                     }
                 }
             });
@@ -282,7 +284,7 @@ public class MyProfileFragment extends Fragment {
                                     @Override
                                     public void onFailure(int i, Header[] headers, Throwable throwable, File file) {
                                         Toast.makeText(getActivity(), "Unable to load profile image.", Toast.LENGTH_SHORT).show();
-                                        Log.e(getString(R.string.app_name), "Unable to load profile image.", throwable);
+                                        Log.e("EXPA", "Unable to load profile image.", throwable);
                                     }
 
                                     @Override
@@ -307,7 +309,7 @@ public class MyProfileFragment extends Fragment {
                                                 }
                                                 catch (IOException e)
                                                 {
-                                                    Log.e(getString(R.string.app_name), "Some error occurs when move file", e);
+                                                    Log.e("EXPA", "Some error occurs when move file", e);
                                                 }
                                             }
                                         }
@@ -353,7 +355,8 @@ public class MyProfileFragment extends Fragment {
                                 if (_introductionTextView.equals("null"))
                                 {
                                     introductionTextView.setText("None");
-                                    introductionTextView.setTextColor(getResources().getColor(android.R.color.darker_gray));
+                                    if(isAdded())
+                                        introductionTextView.setTextColor(getResources().getColor(android.R.color.darker_gray));
                                     introductionDetailImagView.setVisibility(View.INVISIBLE);
                                     //introductionRelativeLayout.setOnClickListener(null);
                                     introductionRelativeLayout.setOnClickListener(new View.OnClickListener() {
@@ -370,7 +373,8 @@ public class MyProfileFragment extends Fragment {
                                 else
                                 {
                                     introductionTextView.setText(_introductionTextView);
-                                    introductionTextView.setTextColor(getResources().getColor(android.R.color.black));
+                                    if(isAdded())
+                                        introductionTextView.setTextColor(getResources().getColor(android.R.color.black));
                                     introductionDetailImagView.setVisibility(View.VISIBLE);
                                     introductionDetailImagView.setImageResource(R.drawable.icon_more);
                                     introductionRelativeLayout.setOnClickListener(new View.OnClickListener() {
@@ -447,40 +451,40 @@ public class MyProfileFragment extends Fragment {
                             }
                             catch (SQLException e)
                             {
-                                Log.e(getString(R.string.app_name), "Some error occurs when save to SQLite", e);
+                                Log.e("EXPA", "Some error occurs when save to SQLite", e);
                             }
                             catch (JSONException e)
                             {
-                                Log.e(getString(R.string.app_name), "Some error occurs when extract data from JSON 2", e);
+                                Log.e("EXPA", "Some error occurs when extract data from JSON 2", e);
                             }
                             catch (ParseException e)
                             {
-                                Log.e(getString(R.string.app_name), "Some error occurs when parse RFC3339 date", e);
+                                Log.e("EXPA", "Some error occurs when parse RFC3339 date", e);
                             }
                         }
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                            Log.e(getString(R.string.app_name), "Some error occurs when HTTP request 2.", throwable);
-                            //Log.e(getString(R.string.app_name), "The following is the JSON string:" + errorResponse.toString());
+                            Log.e("EXPA", "Some error occurs when HTTP request 2.", throwable);
+                            //Log.e("EXPA", "The following is the JSON string:" + errorResponse.toString());
                             //TODO: refresh token
                         }
                     });
                 }
                 catch (JSONException e)
                 {
-                    Log.e(getString(R.string.app_name), "Some error occurs when extract data from JSON 1", e);
+                    Log.e("EXPA", "Some error occurs when extract data from JSON 1", e);
                 }
                 catch (ParseException e)
                 {
-                    Log.e(getString(R.string.app_name), "Some error occurs when parse RFC3339 date", e);
+                    Log.e("EXPA", "Some error occurs when parse RFC3339 date", e);
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.e(getString(R.string.app_name), "Some error occurs when HTTP request 1.", throwable);
-                //Log.e(getString(R.string.app_name), "The following is the JSON string:" + errorResponse.toString());
+                Log.e("EXPA", "Some error occurs when HTTP request 1.", throwable);
+                //Log.e("EXPA", "The following is the JSON string:" + errorResponse.toString());
                 //TODO: refresh token
             }
         });

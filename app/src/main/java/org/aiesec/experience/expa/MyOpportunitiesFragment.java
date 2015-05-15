@@ -1,6 +1,5 @@
 package org.aiesec.experience.expa;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,9 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,14 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class SearchOpportunityFragment extends Fragment {
-    private View view;
-
-
-    public SearchOpportunityFragment() {
+public class MyOpportunitiesFragment extends Fragment {
+    public MyOpportunitiesFragment() {
         // Required empty public constructor
     }
 
@@ -34,17 +25,12 @@ public class SearchOpportunityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_search_opportunity, container, false);
+        View view = inflater.inflate(R.layout.my_opportunities_fragment, container, false);
 
-        SearchView searchView = (SearchView) view.findViewById(R.id.searchView);
-        searchView.setIconifiedByDefault(true);
-        searchView.onActionViewExpanded();
-        searchView.clearFocus();
-
-        ListView listView = (ListView) view.findViewById(R.id.searchOpportunityListView);
-        SimpleAdapter adapter = new SimpleAdapter(getActivity(), getData(), R.layout.search_opportunity_listview_item,
-                new String[]{"title", "location"},
-                new int[]{R.id.projectTitleTextView, R.id.projectLocationTextView});
+        ListView listView = (ListView) view.findViewById(R.id.myOpportunitiesListView);
+        SimpleAdapter adapter = new SimpleAdapter(getActivity(), getData(), R.layout.my_opportunies_listview_item,
+                new String[]{"title", "status"},
+                new int[]{R.id.myOpportunitiesTitleTextView, R.id.myOpportunitiesStatusTextView});
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -57,8 +43,7 @@ public class SearchOpportunityFragment extends Fragment {
             }
         });
 
-        getActivity().setTitle("Search Opportunities");
-
+        getActivity().setTitle("My Opportunies");
         return view;
     }
 
@@ -68,16 +53,14 @@ public class SearchOpportunityFragment extends Fragment {
 
         Map<String, String> map = new HashMap<>();
         map.put("title", "Dare to Dream");
-        map.put("location", "Kuala Lumpur, Malaysia");
+        map.put("status", "Applied");
         list.add(map);
 
         map = new HashMap<>();
         map.put("title", "Project 2");
-        map.put("location", "Beijing");
+        map.put("status", "Matched");
         list.add(map);
 
         return list;
     }
-
-
 }
